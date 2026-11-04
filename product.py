@@ -11,13 +11,8 @@
 # STORE PRODUCT INFO
 # MANAGE STATE
 
+# abstract class, cannot be instantiated, only inherited
 from abc import ABC, abstractmethod
-
-
-class CanBeShipped(ABC):
-    @abstractmethod
-    def calculate_shipping_cost(self):
-        pass
 
 
 class Product(ABC):
@@ -28,11 +23,6 @@ class Product(ABC):
         self.__name = name
         self.__price = price
         self.__stock = stock
-
-
-# class-object(passed from main)-parameter-attribute
-
-# inventory-private
 
     def get_product_id(self):
         return self.__product_id
@@ -56,50 +46,7 @@ class Product(ABC):
         return {"ID": self.__product_id, "Name": self.__name,
                 "Price": self.__price, "Stock": self.__stock}
 
+# abstract method, must be implemented in subclasses, cannot be called directly(for children)
     @abstractmethod
-    def get_fulfilment_info(Self):
+    def get_fulfilment_info(self):
         pass
-
-# child class(inheritance)
-
-
-class PhysicalProduct(Product, CanBeShipped):
-    def __init__(self, product_id, name, price, stock, weight):
-        # super
-        super().__init__(product_id, name, price, stock)
-        self.__weight = weight
-
-    def display_information(self):
-        super().display_information()
-        print(f"Weight:{self.__weight}kg")
-
-    def get_fulfilment_info(self):
-        return "This product requires physical shipping"
-
-    def calculate_shipping_cost(self):
-        return self.__weight * 2.5
-
-    def to_dict(self):
-        data = super().to_dict()
-        data["Type"] = "physical"
-        data["Weight"] = self.__weight
-        return data
-
-
-class DigitalProduct(Product):
-    def __init__(self, product_id, name, price, stock, download_size):
-        super().__init__(product_id, name, price, stock)
-        self.__download_size = download_size
-
-    def display_information(self):
-        super().display_information()
-        print(f"Download size:{self.__download_size} MB")
-
-    def get_fulfilment_info(self):
-        return "This product is delivered digitally."
-
-    def to_dict(self):
-        data = super().to_dict()
-        data["Type"] = "digital"
-        data["Download_size"] = self.__download_size
-        return data
