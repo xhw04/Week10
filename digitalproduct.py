@@ -1,8 +1,8 @@
 
-from digitalproduct import DigitalProduct
+from product import Product
 
 
-class DigitalProduct(DigitalProduct):
+class DigitalProduct(Product):
     def __init__(self, product_id, name, price, stock, download_size):
         super().__init__(product_id, name, price, stock)
         self.__download_size = download_size
