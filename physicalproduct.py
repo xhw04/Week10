@@ -1,15 +1,19 @@
-from physicalproduct import PhysicalProduct
+
 from canbeshipped import CanBeShipped
+from product import Product
 
 # new child class from product,for weight
 
 # class-object(passed from main)-parameter-attribute
+# import product
 
 
-class PhysicalProduct(PhysicalProduct, CanBeShipped):
+class PhysicalProduct(Product, CanBeShipped):
+    # create new attribute (weight)
     def __init__(self, product_id, name, price, stock, weight):
         # child class inherits from parent class, call parent constructor
         super().__init__(product_id, name, price, stock)
+        # child class new attribute (weight)
         self.__weight = weight
 
     def display_information(self):
