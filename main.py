@@ -20,6 +20,8 @@ import os
 from inventory import Inventory
 from physicalproduct import PhysicalProduct
 from digitalproduct import DigitalProduct
+from product import Product
+from supplier import Supplier
 
 file_name = "inventory.json"
 
@@ -35,13 +37,16 @@ def save_inventory(inventory):
 
 
 # load: pick the right subclass using "Type"
-def create_product_from_dict(item):
+def create_product_from_dict(item: dict) -> Product | None:
+    s = item["Supplier"]
+    supplier = Supplier(s["ID"], s["Name"], s["Email"])
+
     if item["Type"] == "physical":
         return PhysicalProduct(item["ID"], item["Name"], item["Price"],
-                               item["Stock"], item["Weight"])
+                               item["Stock"], supplier, item["Weight"])
     elif item["Type"] == "digital":
         return DigitalProduct(item["ID"], item["Name"], item["Price"],
-                              item["Stock"], item["Download_size"])
+                              item["Stock"], supplier, item["Download_size"])
     return None
 
 # 1.display (load)
