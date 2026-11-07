@@ -4,10 +4,15 @@
 # DISPLAY PRODUCT
 
 # create class
+
+
+from product import Product
+
+
 class Inventory:
     def __init__(self):
         # products is list
-        self.__products = []
+        self.__products: list = [Product]
 
 # get products from list
     def get_products(self):
@@ -35,11 +40,19 @@ class Inventory:
         return None
 
 # 2.add from dict
-    def add_product(self, product):
+    def add_product(self, product: Product) -> bool:
         # call product.py,if not empty
         if self.search_product(product.get_product_id()) is not None:
             print("Product ID already exists.")
             return False
         # then append to list
         self.__products.append(product)
+        return True
+
+# remove from dict
+    def remove_product(self, product_id):
+        product = self.search_product(product_id)
+        if product is None:
+            return False
+        self.__products.remove(product)
         return True
