@@ -11,6 +11,8 @@
 # STORE PRODUCT INFO
 # MANAGE STATE
 
+from supplier import Supplier
+
 # abstract class, cannot be instantiated, only inherited
 from abc import ABC, abstractmethod
 
@@ -18,14 +20,22 @@ from abc import ABC, abstractmethod
 class Product(ABC):
     # from previous, have id/name/price/stock-parameters
     # self.__ (private attributes,only in class)
-    def __init__(self, product_id, name, price, stock):
+    def __init__(self, product_id: str, name: str, price: float, stock: int, supplier: Supplier):
         self.__product_id = product_id
         self.__name = name
         self.__price = price
         self.__stock = stock
+        self.__supplier = supplier
 
     def get_product_id(self):
         return self.__product_id
+
+    def get_supplier(self):
+        return self.__supplier
+
+# for orderline
+    def get_price(self):
+        return self.__price
 
 # 1.display one row of product info(id,name,stock,price)
     def display_information(self):
@@ -46,7 +56,7 @@ class Product(ABC):
         return {"ID": self.__product_id, "Name": self.__name,
                 "Price": self.__price, "Stock": self.__stock}
 
-# abstract method, must be implemented in subclasses, cannot be called directly(for children)
+# abstract method, must be implemented in child class,cannot be called directly(for children)
     @abstractmethod
     def get_fulfilment_info(self):
         pass
