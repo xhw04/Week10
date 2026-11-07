@@ -11,10 +11,6 @@
 # 5. Save inventory
 # 6. Exit
 
-# asking the user for input (encapsulation called method)
-# managing the entire inventory
-
-
 import json
 import os
 from inventory import Inventory
@@ -27,12 +23,9 @@ file_name = "inventory.json"
 
 
 # 5.save
-
-# call json dict from product.py
-def save_inventory(inventory):
-    # call product list from inventory.py
+def save_inventory(inventory: Inventory) -> None:
     data = [p.to_dict() for p in inventory.get_products()]
-    with open(file_name, "w")as file:
+    with open(file_name, "w") as file:
         json.dump(data, file, indent=4)
 
 
@@ -49,10 +42,9 @@ def create_product_from_dict(item: dict) -> Product | None:
                               item["Stock"], supplier, item["Download_size"])
     return None
 
+
 # 1.display (load)
-
-
-def load_inventory():
+def load_inventory() -> Inventory:
     inventory = Inventory()
     if os.path.exists(file_name):
         with open(file_name, "r") as file:
@@ -64,19 +56,19 @@ def load_inventory():
         print("inventory.json found. Inventory loaded successfully.")
     else:
         print("inventory.json not found. Creating default inventory.")
+        supplier = Supplier("S001", "TechSupply", "sales@techsupply.com")
         inventory.add_product(PhysicalProduct(
-            "P001", "Laptop", 1200.00, 15, 2.1))
-        inventory.add_product(PhysicalProduct("P002", "Mouse", 25.50, 40, 0.1))
+            "P001", "Laptop", 1200.00, 15, supplier, 2.1))
+        inventory.add_product(PhysicalProduct(
+            "P002", "Mouse", 25.50, 40, supplier, 0.1))
         inventory.add_product(DigitalProduct(
-            "P003", "Antivirus", 45.00, 25, 300))
+            "P003", "Antivirus", 45.00, 25, supplier, 300))
         save_inventory(inventory)
     return inventory
 
-# 2.add product
-
 
 # 2.add product
-def add_product_menu(inventory):
+def add_product_menu(inventory: Inventory) -> None:
     print("\nAdd New Product")
     print("1. Physical product")
     print("2. Digital product")
@@ -90,24 +82,31 @@ def add_product_menu(inventory):
     try:
         price = float(input("Price: "))
         stock = int(input("Stock Quantity: "))
+
+        supplier = Supplier(input("Supplier ID: "),
+                            input("Supplier Name: "),
+                            input("Supplier Email: "))
+
         if product_type == "1":
             weight = float(input("Weight (kg): "))
-            product = PhysicalProduct(product_id, name, price, stock, weight)
+            product = PhysicalProduct(product_id, name, price, stock,
+                                      supplier, weight)
         else:
             size = float(input("Download size (MB): "))
-            product = DigitalProduct(product_id, name, price, stock, size)
+            product = DigitalProduct(product_id, name, price, stock,
+                                     supplier, size)
     except ValueError:
         print("Invalid number entered.")
         return
 
     if inventory.add_product(product):
         print("\nProduct added successfully!")
+
+
 # 3.update
-
-
-def update_stock_menu(inventory):
+def update_stock_menu(inventory: Inventory) -> None:
     print("\nUpdate Stock")
-    product = inventory.search_product(input("Enter Product ID: "))
+    product = inventory.find_product(input("Enter Product ID: "))
     if product is None:
         print("Product not found.")
         return
@@ -120,21 +119,21 @@ def update_stock_menu(inventory):
     if product.update_stock(quantity):
         print("\nStock updated successfully!")
 
+
 # 4.search product
-
-
-def search_product_menu(inventory):
+def search_product_menu(inventory: Inventory) -> None:
     print("\nSearch Product")
-    product = inventory.search_product(input("Enter Product ID: "))
+    product = inventory.find_product(input("Enter Product ID: "))
     if product is None:
         print("Product not found.")
     else:
         print("Product Found")
         product.display_information()
-        print(product.get_fufilment_info())
+        print(product.get_fulfilment_info())
+        product.get_supplier().display_information()
 
 
-def main():
+def main() -> None:
     print("============")
     print("INVENTORY MANAGEMENT SYSTEM")
     print("============\n")
