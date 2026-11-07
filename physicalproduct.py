@@ -1,6 +1,7 @@
 
 from canbeshipped import CanBeShipped
 from product import Product
+from supplier import Supplier
 
 # new child class from product,for weight
 
@@ -10,11 +11,11 @@ from product import Product
 
 class PhysicalProduct(Product, CanBeShipped):
     # create new attribute (weight)
-    def __init__(self, product_id, name, price, stock, weight):
+    def __init__(self, product_id: str, name: str, price: float, stock: int, supplier: Supplier, weight: float):
         # child class inherits from parent class, call parent constructor
-        super().__init__(product_id, name, price, stock)
+        super().__init__(product_id, name, price, stock, supplier)
         # child class new attribute (weight)
-        self.__weight = weight
+        self.__weight: float = weight
 
     def display_information(self):
         super().display_information()
@@ -23,7 +24,7 @@ class PhysicalProduct(Product, CanBeShipped):
     def get_fulfilment_info(self):  # abstract method, called in child class
         return "This product requires physical shipping"
 
-# calculate shipping cost based on weight (from abstract class CanBeShipped,called in childclass)
+# calculate shipping cost based on weight (from interface CanBeShipped,called in childclass)
     def calculate_shipping_cost(self):
         return self.__weight * 2.5
 
